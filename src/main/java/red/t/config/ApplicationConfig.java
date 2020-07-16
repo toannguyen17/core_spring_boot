@@ -19,12 +19,6 @@ import org.thymeleaf.templatemode.TemplateMode;
 import java.nio.charset.StandardCharsets;
 
 @Configuration
-//@EnableWebMvc
-//@ComponentScan("red.t")
-//@EnableJpaRepositories("red.t.repository")
-//@EnableSpringDataWebSupport
-//@EnableTransactionManagement
-//@EnableAspectJAutoProxy
 public class ApplicationConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 	private ApplicationContext applicationContext;
 
@@ -45,6 +39,7 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter implements Applic
 		templateResolver.setSuffix(".html");
 		templateResolver.setTemplateMode(TemplateMode.HTML);
 		templateResolver.setCharacterEncoding("UTF-8");
+		// templateResolver.setCacheable(true);
 		return templateResolver;
 	}
 
