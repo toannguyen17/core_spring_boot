@@ -1,6 +1,6 @@
 package red.t.service.posts;
 
-import red.t.model.Posts;
+import red.t.model.database.Posts;
 import red.t.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

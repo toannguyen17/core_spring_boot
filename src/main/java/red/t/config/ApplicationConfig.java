@@ -11,7 +11,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.converter.StringHttpMessageConverter;
 
 import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
@@ -19,7 +18,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import java.nio.charset.StandardCharsets;
 
 @Configuration
-public class ApplicationConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
+public class ApplicationConfig implements ApplicationContextAware {
 	private ApplicationContext applicationContext;
 
 	@Autowired
