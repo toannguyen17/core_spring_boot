@@ -4,10 +4,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 @Entity
 @Table
+@Transactional
 public class Posts {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,4 +1,4 @@
-package c0320h1.util.storage;
+package c0320h1.system.filesystem.exception;
 
 public class StorageException extends RuntimeException {
     public StorageException(String message) {

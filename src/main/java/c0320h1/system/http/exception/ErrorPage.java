@@ -1,4 +1,4 @@
-package c0320h1.app.http.error_page;
+package c0320h1.system.http.exception;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -17,11 +17,26 @@ public class ErrorPage implements ErrorController {
 		if (status != null) {
 			Integer statusCode = Integer.valueOf(status.toString());
 
-			if(statusCode == HttpStatus.NOT_FOUND.value()) {
-				return "error/404";
+			if(statusCode == HttpStatus.BAD_REQUEST.value()) {
+				return "error/400";
+			}
+			else if(statusCode == HttpStatus.UNAUTHORIZED.value()) {
+				return "error/401";
+			}
+			else if(statusCode == HttpStatus.FORBIDDEN.value()) {
+				return "error/403";
+			}
+			else if(statusCode == HttpStatus.INSUFFICIENT_SPACE_ON_RESOURCE.value()) {
+				return "error/419";
+			}
+			else if(statusCode == HttpStatus.TOO_MANY_REQUESTS.value()) {
+				return "error/429";
 			}
 			else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
 				return "error/500";
+			}
+			else if(statusCode == HttpStatus.SERVICE_UNAVAILABLE.value()) {
+				return "error/503";
 			}
 		}
 		return "error/404";

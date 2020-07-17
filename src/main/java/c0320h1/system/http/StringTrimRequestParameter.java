@@ -1,4 +1,4 @@
-package c0320h1.app.helpers;
+package c0320h1.system.http;
 
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.web.bind.WebDataBinder;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.support.WebBindingInitializer;
 
 @ControllerAdvice
-public class CustomWebBindingInitializer implements WebBindingInitializer {
+public class StringTrimRequestParameter implements WebBindingInitializer {
 	@InitBinder
 	@Override
 	public void initBinder(WebDataBinder binder) {

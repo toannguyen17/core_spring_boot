@@ -2,6 +2,7 @@ package c0320h1.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -15,12 +16,14 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.Properties;
 
 @Configuration
 public class Database {
 	@Autowired
 	private Environment env;
+
+	@Autowired
+	private JpaProperties jpaProperties;
 
 	// CONFIG CONFIG DATABASE
 	@Bean
@@ -36,7 +39,7 @@ public class Database {
 		em.setPackagesToScan("c0320h1.model");
 		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		em.setJpaVendorAdapter(vendorAdapter);
-		em.setJpaProperties(additionalProperties());
+		em.setJpaPropertyMap(jpaProperties.getProperties());
 		return em;
 	}
 
@@ -62,15 +65,4 @@ public class Database {
 		return transactionManager;
 	}
 	// END CONFIG DATABASE
-
-
-	private Properties additionalProperties() {
-		String hbm2ddl_auto      = env.getProperty("spring.jpa.properties.hibernate.hbm2ddl.auto");
-		String hibernate_dialect = env.getProperty("spring.jpa.properties.hibernate.dialect");
-
-		Properties properties = new Properties();
-		properties.setProperty("hibernate.hbm2ddl.auto", hbm2ddl_auto);
-		properties.setProperty("hibernate.dialect",      hibernate_dialect);
-		return properties;
-	}
 }

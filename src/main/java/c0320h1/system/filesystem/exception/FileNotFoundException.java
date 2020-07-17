@@ -1,4 +1,4 @@
-package c0320h1.util.storage;
+package c0320h1.system.filesystem.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

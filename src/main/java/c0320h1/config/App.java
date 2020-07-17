@@ -1,5 +1,6 @@
 package c0320h1.config;
 
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,10 +12,14 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.converter.StringHttpMessageConverter;
 
 import org.springframework.web.filter.CharacterEncodingFilter;
+
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
+
 import java.nio.charset.StandardCharsets;
 
 @Configuration
@@ -46,6 +51,7 @@ public class App implements ApplicationContextAware {
 	public SpringTemplateEngine templateEngine() {
 		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
 		templateEngine.setTemplateResolver(templateResolver());
+		templateEngine.addDialect(layoutDialect());
 		return templateEngine;
 	}
 
@@ -57,6 +63,11 @@ public class App implements ApplicationContextAware {
 		viewResolver.setForceContentType(true);
 		viewResolver.setContentType("text/html; charset=UTF-8");
 		return viewResolver;
+	}
+
+	@Bean
+	public LayoutDialect layoutDialect() {
+		return new LayoutDialect();
 	}
 	// END - Template View
 

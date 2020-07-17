@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorator="error/error.html">
 <head>
 	<meta charset="UTF-8">
-	<title>Title</title>
+	<title layout:fragment="content">Not Found</title>
 </head>
 <body>
-Template - error 404
+<div layout:fragment="code">
+	404
+</div>
+<div layout:fragment="message">
+	Not Found
+</div>
 </body>
 </html>
