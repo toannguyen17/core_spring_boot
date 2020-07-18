@@ -31,6 +31,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.session:spring-session-core'
 
+    compile group: 'at.favre.lib', name: 'bcrypt', version: '0.9.0'
+
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
@@ -51,4 +53,10 @@ dependencies {
     compile group: 'org.webjars', name: 'bootstrap', version: '4.5.0'
 
     compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.session:spring-session-bom:Corn-SR2'
+    }
 }

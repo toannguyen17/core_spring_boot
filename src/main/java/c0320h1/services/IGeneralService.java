@@ -5,9 +5,9 @@ import java.util.Optional;
 public interface IGeneralService<T> {
 	Iterable<T> findAll();
 
-	void save(T posts);
+	void save(T entity);
 
-	void update(T posts);
+	void update(T entity);
 
 	Optional<T> findById(Long id);
 
