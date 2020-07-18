@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class LoginController extends AuthenticatesUsers {
-
 	@Override
 	protected void authenticated(Users users)
 	{

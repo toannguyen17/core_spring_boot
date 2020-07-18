@@ -1,21 +1,19 @@
 package c0320h1.app.http.controller;
 
+import c0320h1.app.middleware.Guestable;
 import c0320h1.system.filesystem.Storage;
 import c0320h1.system.http.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import javax.interceptor.Interceptors;
 
 @Controller
+@Interceptors(Guestable.class)
 public class FileController {
 
     @Autowired

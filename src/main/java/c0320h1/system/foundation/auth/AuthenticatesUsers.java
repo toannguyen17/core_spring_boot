@@ -26,9 +26,9 @@ public abstract class AuthenticatesUsers {
 	/**
 	 * Handle a login request to the application.
 	 */
-
 	@GetMapping("/login")
 	public String index(){
+		System.out.println(auth.check());
 		return loginForm;
 	}
 

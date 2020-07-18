@@ -26,6 +26,10 @@ public class FormRegister {
 	@Size(min = 6, max = 255)
 	private String password_confirm;
 
+	public FormRegister(){
+
+	}
+
 	public String getLast_name() {
 		return last_name;
 	}
@@ -64,5 +68,16 @@ public class FormRegister {
 
 	public void setPassword_confirm(String password_confirm) {
 		this.password_confirm = password_confirm;
+	}
+
+	@Override
+	public String toString() {
+		return "FormRegister{" +
+				"last_name='" + last_name + '\'' +
+				", first_name='" + first_name + '\'' +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", password_confirm='" + password_confirm + '\'' +
+				'}';
 	}
 }

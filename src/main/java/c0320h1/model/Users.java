@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Table
 public class Users {
 	@Id
-	@Column(nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
@@ -19,6 +18,7 @@ public class Users {
 	@Column(unique = true, nullable = false)
 	private String email;
 
+	@Column(nullable = false)
 	private String password;
 
 	@Column(name = "remember_token")

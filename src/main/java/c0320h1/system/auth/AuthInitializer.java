@@ -16,21 +16,17 @@ import javax.servlet.http.HttpSession;
 
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode= ScopedProxyMode.TARGET_CLASS)
-// @Scope(value = WebApplicationContext.SCOPE_REQUEST)
 public class AuthInitializer implements Auth, Guard {
-	private Users user;
+	protected Users user;
 
 	@Autowired
-	private HttpServletRequest request;
+	protected HttpServletRequest request;
 
 	@Autowired
-	private HttpSession session;
+	protected UserProvider provider;
 
 	@Autowired
-	private UserProvider provider;
-
-	@Autowired
-	private Str str;
+	protected Str str;
 
 	public AuthInitializer(){
 	}
@@ -50,19 +46,22 @@ public class AuthInitializer implements Auth, Guard {
 			return user;
 		}
 
-		if(session.getAttribute("login_web") == null)
-			return null;
+		HttpSession session = request.getSession();
 
-		Long id = (Long) session.getAttribute("login_web");
+		if(session.getAttribute("login_web") != null){
+			Long id = (Long) session.getAttribute("login_web");
 
-		if (id != 0){
-			user = provider.retrieveById(id);
+			System.out.println("------------------------------------");
+			System.out.println(id);
+
+			if (id != 0){
+				user = provider.retrieveById(id);
+			}
 		}
 
 		Recaller recaller;
 		if (user == null && (recaller = recaller()) != null) {
 			user = userFromRecaller(recaller);
-
 			if (user != null){
 				updateSession(user.getId());
 			}
@@ -91,6 +90,7 @@ public class AuthInitializer implements Auth, Guard {
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response) {
 		Cookie[] cookies = request.getCookies();
+		HttpSession session = request.getSession();
 		session.removeAttribute("login_web");
 
 		if (cookies != null && response != null){
@@ -112,7 +112,7 @@ public class AuthInitializer implements Auth, Guard {
 		// this.session = null;
 	}
 
-	private Recaller recaller() {
+	protected Recaller recaller() {
 		if (request == null)
 			return null;
 
@@ -132,32 +132,32 @@ public class AuthInitializer implements Auth, Guard {
 		return null;
 	}
 
-	private Users userFromRecaller(Recaller recaller) {
+	protected Users userFromRecaller(Recaller recaller) {
 		if (!recaller.valid()) {
 			return null;
 		}
-
 		user = provider.retrieveByToken(recaller.id(), recaller.token());
 		return user;
 	}
 
-	private void updateSession(long id){
+	protected void updateSession(Long id){
+		HttpSession session = request.getSession();
 		session.setAttribute("login_web", id);;
 	}
 
-	private void ensureRememberTokenIsSet(Users user)
+	protected void ensureRememberTokenIsSet(Users user)
 	{
 		if (user.getRememberToken() == null) {
 			cycleRememberToken(user);
 		}
 	}
 
-	private void cycleRememberToken(Users user) {
+	protected void cycleRememberToken(Users user) {
 		String token = str.random(60);
 		provider.updateRememberToken(user, token);
 	}
 
-	private void createRecallerCookie(Users user, HttpServletResponse response) {
+	protected void createRecallerCookie(Users user, HttpServletResponse response) {
 		String cookieValue = user.getId() + "|" + user.getRememberToken();
 		Cookie cookie = new Cookie("remember_web", cookieValue);
 		cookie.setPath("/");
@@ -169,5 +169,9 @@ public class AuthInitializer implements Auth, Guard {
 	@Override
 	public Guard guard() {
 		return this;
+	}
+
+	public void setRequest(HttpServletRequest request) {
+		this.request = request;
 	}
 }

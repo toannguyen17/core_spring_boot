@@ -10,7 +10,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -24,43 +23,44 @@ public abstract class RegistersUsers {
 	@Autowired
 	private UsersService service;
 
-	@ModelAttribute("register")
-	public FormRegister formRegister() {
-		return new FormRegister();
-	}
-
 	@GetMapping("register")
-	public String index(){
+	public String index(Model model){
+		model.addAttribute("formRegister", new FormRegister());
 		return view;
 	}
 
 	@PostMapping("register")
-	public String register(@Valid @RequestParam FormRegister form, BindingResult bindingResult, HttpServletResponse response, Model model){
-		if (!bindingResult.hasErrors() && validator(form)){
+	public String register(@Valid FormRegister formRegister, BindingResult bindingResult, HttpServletResponse response, Model model){
+		System.out.println(formRegister);
+		if (!bindingResult.hasErrors() && validator(formRegister, bindingResult)){
 			try {
-				Users users = create(form);
+				Users users = create(formRegister);
 				auth.guard().login(users, response);
 				registered(users);
 				return "redirect:" + redirectTo;
 			}catch (DataIntegrityViolationException e){
 				System.out.println("------------------------------------");
 				System.out.println("------------------------------------");
-				System.out.println("DDax ton tai");
-				bindingResult.rejectValue("login", "login.invalid", "The account or password is incorrect.");
+				System.out.println("Đã ton tai");
+				bindingResult.rejectValue("email", "email.unique", "Email already exists");
 			}
 		}
 
-		model.addAttribute("register", form);
+		System.out.println(bindingResult);
+
+		model.addAttribute("formRegister", formRegister);
 		return view;
 	}
 
-	protected boolean validator(FormRegister form)
+	protected boolean validator(FormRegister form, BindingResult bindingResult)
 	{
-		if (!form.getPassword().equals(form.getPassword_confirm()))
-		{
-			return false;
+		boolean check = true;
+		if (!form.getPassword().equals(form.getPassword_confirm())){
+			bindingResult.rejectValue("password", "password.confirm_password", "Confirm Password does not match.");
+			bindingResult.rejectValue("password_confirm", "password.confirm_password", "Confirm Password does not match.");
+			check = false;
 		}
-		return true;
+		return check;
 	}
 
 	private Users create(FormRegister form)

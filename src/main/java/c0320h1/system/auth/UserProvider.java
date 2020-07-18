@@ -1,7 +1,6 @@
 package c0320h1.system.auth;
 
 import c0320h1.model.Users;
-import c0320h1.repository.users.UsersRepository;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import c0320h1.services.users.UsersService;
 import c0320h1.system.auth.form.FormLogin;
@@ -36,6 +35,8 @@ public class UserProvider {
 
 	public Users retrieveByToken(Long id, String token){
 		Optional<Users> optional = service.findById(id);
+
+		System.out.println("optional: " + optional.isPresent());
 
 		if (optional.isPresent()){
 			Users user = optional.get();

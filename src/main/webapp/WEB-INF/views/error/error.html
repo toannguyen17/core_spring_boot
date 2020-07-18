@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
-	<title layout:fragment="content">@yield('title')</title>
+	<title layout:fragment="content">Error</title>
+
+	<link rel="shortcut icon" href="/favicon.png" />
 
 	<!-- Fonts -->
 	<link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -54,13 +54,8 @@
 </head>
 <body>
 <div class="flex-center position-ref full-height">
-	<div class="code" layout:fragment="code">
-		@yield('code')
-	</div>
-
-	<div class="message" style="padding: 10px;" layout:fragment="message">
-		@yield('message')
-	</div>
+	<div class="code" layout:fragment="code"></div>
+	<div class="message" style="padding: 10px;" layout:fragment="message"></div>
 </div>
 </body>
 </html>
