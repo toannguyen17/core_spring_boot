@@ -27,13 +27,14 @@ public abstract class AuthenticatesUsers {
 	 * Handle a login request to the application.
 	 */
 	@GetMapping("/login")
-	public String index(){
+	public String index(Model model){
 		System.out.println(auth.check());
+		model.addAttribute("formLogin", new FormLogin());
 		return loginForm;
 	}
 
 	@PostMapping("/login")
-	public String login(@Valid @RequestParam("login") FormLogin form, BindingResult bindingResult, HttpServletResponse response, Model model) {
+	public String login(@Valid FormLogin form, BindingResult bindingResult, HttpServletResponse response, Model model) {
 
 		if (!bindingResult.hasErrors()){
 			Users users = null;
@@ -42,10 +43,11 @@ public abstract class AuthenticatesUsers {
 				return "redirect:" + redirectTo;
 			}
 
-			bindingResult.rejectValue("login", "login.invalid", "The account or password is incorrect.");
+			bindingResult.rejectValue("email", "email.invalid", "The account or password is incorrect.");
+			bindingResult.rejectValue("password", "password.invalid", "The account or password is incorrect.");
 		}
 
-		model.addAttribute(username, form.getEmail());
+		model.addAttribute("formLogin", form);
 		return loginForm;
 	}
 
@@ -59,13 +61,11 @@ public abstract class AuthenticatesUsers {
 	 * Log the user out of the application.
 	 */
 	@GetMapping("logout")
-	public String logout(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
 		if (auth.check()){
 			loggedOut(auth.user());
 			auth.logout(request, response);
 		}
-
-		session.invalidate();
 		return "redirect:" + redirectTo;
 	}
 

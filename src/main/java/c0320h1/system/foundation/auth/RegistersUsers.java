@@ -31,7 +31,6 @@ public abstract class RegistersUsers {
 
 	@PostMapping("register")
 	public String register(@Valid FormRegister formRegister, BindingResult bindingResult, HttpServletResponse response, Model model){
-		System.out.println(formRegister);
 		if (!bindingResult.hasErrors() && validator(formRegister, bindingResult)){
 			try {
 				Users users = create(formRegister);
@@ -39,14 +38,9 @@ public abstract class RegistersUsers {
 				registered(users);
 				return "redirect:" + redirectTo;
 			}catch (DataIntegrityViolationException e){
-				System.out.println("------------------------------------");
-				System.out.println("------------------------------------");
-				System.out.println("Đã ton tai");
 				bindingResult.rejectValue("email", "email.unique", "Email already exists");
 			}
 		}
-
-		System.out.println(bindingResult);
 
 		model.addAttribute("formRegister", formRegister);
 		return view;

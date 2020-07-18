@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+	<th:block th:fragment="head_type">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	</th:block>
+	<title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">C0320H1</title>
+
+	<th:block th:fragment="bootstrap">
+	<link rel="shortcut icon" href="/favicon.png" />
+	<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+	<script src="/webjars/popper.js/1.16.0/popper.min.js"></script>
+	<script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&lang=vi" rel="stylesheet" type="text/css">
+	<link type="text/css" rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css">
+	</th:block>
+
+	<th:block layout:fragment="head"></th:block>
+</head>
+<body>
+<div id="app">
+	<nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+		<div class="container">
+			<a class="navbar-brand" th:href="@{/}">
+				Home
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<!-- Left Side Of Navbar -->
+				<ul class="navbar-nav mr-auto">
+
+				</ul>
+
+				<!-- Right Side Of Navbar -->
+				<ul class="navbar-nav ml-auto">
+					<!-- Authentication Links -->
+					<th:block th:unless="${@authInitializer.check()}">
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/login}">Login</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/register}">Register</a>
+						</li>
+					</th:block>
+
+					<th:block th:if="${@authInitializer.check()}">
+						<li class="nav-item dropdown">
+							<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+								<th:block th:text="${@authInitializer.user().getFirstName() + ' ' + @authInitializer.user().getLastName()}">
+									Name
+								</th:block>
+								<span class="caret"></span>
+							</a>
+
+							<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" th:href="@{/logout}">
+									Logout
+								</a>
+							</div>
+						</li>
+					</th:block>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<main class="py-4">
+		<th:block layout:fragment="content"></th:block>
+	</main>
+</div>
+</body>
+</html>

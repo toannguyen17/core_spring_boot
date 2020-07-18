@@ -109,7 +109,8 @@ public class AuthInitializer implements Auth, Guard {
 		}
 		user         = null;
 		this.request = null;
-		// this.session = null;
+
+		session.invalidate();
 	}
 
 	protected Recaller recaller() {

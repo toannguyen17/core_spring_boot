@@ -1,4 +1,4 @@
-package c0320h1.system.http.exception;
+package c0320h1.system.http;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;

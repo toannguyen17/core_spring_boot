@@ -20,20 +20,12 @@ public class UserServiceImpl implements UsersService {
 
 	@Override
 	public void save(Users users) {
-		try {
-			repository.save(users);
-		}catch (DataIntegrityViolationException e) {
-			//
-		}
+		repository.save(users);
 	}
 
 	@Override
 	public void update(Users users) {
-		try {
-			repository.save(users);
-		}catch (DataIntegrityViolationException e){
-			//
-		}
+		repository.save(users);
 	}
 
 	@Override
