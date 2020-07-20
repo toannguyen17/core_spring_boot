@@ -4,7 +4,6 @@ import c0320h1.app.middleware.Authenticate;
 import c0320h1.app.middleware.Guestable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -23,12 +22,15 @@ public class HttpMiddleware extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		// Guest middleware
-		InterceptorRegistration guestable = registry.addInterceptor(guestable());
-		guestable.addPathPatterns("/login", "/register");
-
 		// Auth middleware
-		InterceptorRegistration authenticate = registry.addInterceptor(authenticate());
-		authenticate.addPathPatterns("/user");
+		registry.addInterceptor(authenticate()).addPathPatterns(
+				"/user/**/"
+		);
+
+		// Guest middleware
+		registry.addInterceptor(guestable()).addPathPatterns(
+				"/login",
+				"/register"
+		);
 	}
 }

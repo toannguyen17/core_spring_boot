@@ -12,12 +12,18 @@
 	<title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">C0320H1</title>
 
 	<th:block th:fragment="bootstrap">
-	<link rel="shortcut icon" href="/favicon.png" />
-	<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
-	<script src="/webjars/popper.js/1.16.0/popper.min.js"></script>
-	<script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-	<link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&lang=vi" rel="stylesheet" type="text/css">
-	<link type="text/css" rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css">
+		<link rel="shortcut icon" href="/favicon.png" />
+		<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+		<script src="/webjars/popper.js/1.16.0/popper.min.js"></script>
+		<script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+		<script th:src="@{//cdn.jsdelivr.net/npm/lazyload@2.0.0-rc.2/lazyload.min.js}"></script>
+
+		<script th:src="@{//cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js}"></script>
+		<link type="text/css" rel="stylesheet" th:href="@{//cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css}">
+		
+		<link th:href="@{//fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&lang=vi}" rel="stylesheet" type="text/css">
+		<link type="text/css" rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css">
 	</th:block>
 
 	<th:block layout:fragment="head"></th:block>
