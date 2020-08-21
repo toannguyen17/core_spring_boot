@@ -49,7 +49,43 @@
 	<div id="content" style="margin-left: 250px">
 		<div id="installation">
 			<h2>Installation</h2>
-			<p><code>git clone https://github.com/toannguyen2/core_spring_boot.git</code></p>
+			<div class="mt-5" style="margin-left: 40px;">
+				<h5>
+					Yêu cầu:
+				</h5>
+				<p style="font-size: .9em;">
+					Gradle: >= 6.5
+				</p>
+			</div>
+
+			<div class="mt-5">
+				<p><strong>Bước 1:</strong> clone dự án về máy.</p>
+				<p class="ml-5"><code>git clone https://github.com/toannguyen2/core_spring_boot.git</code></p>
+			</div>
+
+			<div class="mt-5">
+				<p><strong>Bước 2:</strong> mở terminal chạy mã sau trong thư mục gốc của dự án vừa clone về.</p>
+				<p class="ml-5"><code>gradle wrapper</code></p>
+			</div>
+
+			<div class="mt-5">
+				<p><strong>Bước 3:</strong> Cấu hình environment theo hướng dẫn sau:</p>
+				<p class="ml-5"><a href="https://codegym.vn/blog/2020/04/29/huong-dan-su-dung-environment-variable-trong-spring-boot/" style="color:#0a90e7">Hướng dẫn sử dụng environment variable trong Spring Boot</a></p>
+			</div>
+
+			<div class="mt-5">
+				<p><strong>Bước 4:</strong> Thông tin đănh nhập cơ sở dữ liệu:</p>
+				<p>
+					mở tệp .env trong thư mục gốc của dự án, sửa thông tin đăng nhập database.
+				</p>
+				Ví dụ:
+				<p class="ml-5">
+					DB_DRIVER=com.mysql.cj.jdbc.Driver<br />
+					DB_URL=jdbc:mysql://127.0.0.1:3306/blog_test?serverTimezone=UTC<br />
+					DB_USERNAME=root<br />
+					DB_PASSWORD=<br />
+				</p>
+			</div>
 
 			<div class="line"></div>
 		</div>
