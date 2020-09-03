@@ -6,11 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface Storage {
-    Storage disk(String disk);
+    void putFile(MultipartFile file, String path);
 
-    void putFile(String path, MultipartFile file);
-
-    void putFile(String path, MultipartFile file, String name);
+    void putFile(MultipartFile file, String path, String name);
 
     Resource get(String filename);
 

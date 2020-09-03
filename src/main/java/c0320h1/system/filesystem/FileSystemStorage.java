@@ -1,11 +1,9 @@
 package c0320h1.system.filesystem;
 
-import c0320h1.system.properties.StorageProperties;
+
 import c0320h1.system.filesystem.exception.FileNotFoundException;
 import c0320h1.system.filesystem.exception.StorageException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
+
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -13,10 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -24,81 +20,59 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 @Component
-@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
+//@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class FileSystemStorage implements Storage {
-    private Path location;
-
-    private StorageProperties properties;
-
-    @Autowired
-    public FileSystemStorage(StorageProperties properties) {
-        this.properties = properties;
-        this.location = Paths.get(this.properties.getLocation() + "/" + properties.getDisk());
+    public FileSystemStorage() {
     }
 
     /*
      * Lấy dường dẫn tệp trong thư mục gốc
      */
-    public Path getPath(String filename) {
-        return Paths.get(location.toString() + "/" + filename);
+    public Path getPath(String pathString) {
+        Path path = Paths.get(pathString);
+        makeDirectory(path);
+        return path;
     }
 
-    public Path getPath(String filename, String pathName, boolean create) {
-        Path path = this.location;
-        if (pathName != null) {
-            path = Paths.get(path.toString() + "/" + pathName);
-            if (create) {
-                makeDirectory(path);
-            }
-        }
+    public Path getPath(String filename, String pathString) {
+        Path path = Paths.get(pathString);
+        makeDirectory(path);
         path = Paths.get(path.toString() + "/" + filename);
         return path;
     }
 
-    /*
-     * Chọn thư mục gốc
-     */
     @Override
-    public Storage disk(String disk) {
-        checkPath(disk);
-        this.location = Paths.get(properties.getLocation() + "/" + disk);
-        return this;
-    }
-
-    @Override
-    public void putFile(String path, MultipartFile file) {
-        String filename = StringUtils.cleanPath(file.getOriginalFilename());
-        try {
-            if (file.isEmpty()) {
+    public void putFile(MultipartFile file, String path) {
+        String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+            if (file.isEmpty())
                 throw new StorageException("Failed to store empty file " + filename);
-            }
+
             checkPath(filename, path);
-            try (InputStream inputStream = file.getInputStream()) {
-                Path path_save = getPath(filename, path, true);
+            try {
+                InputStream inputStream = file.getInputStream();
+                Path path_save = getPath(filename, path);
                 Files.copy(inputStream, path_save, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }
-        catch (IOException e) {
-            throw new StorageException("Failed to store file " + filename, e);
-        }
     }
 
     @Override
-    public void putFile(String path, MultipartFile file, String name) {
+    public void putFile(MultipartFile file, String path, String name) {
         String filename = StringUtils.cleanPath(name);
-        try {
-            if (file.isEmpty()) {
-                throw new StorageException("Failed to store empty file " + filename);
-            }
-            checkPath(filename, path);
-            try (InputStream inputStream = file.getInputStream()) {
-                Path path_save = getPath(filename, path, true);
-                Files.copy(inputStream, path_save, StandardCopyOption.REPLACE_EXISTING);
-            }
+
+        if (file.isEmpty())
+            throw new StorageException("Failed to store empty file " + filename);
+
+        checkPath(filename, path);
+        try (InputStream inputStream = file.getInputStream()) {
+            Path path_save = getPath(filename, path);
+            Files.copy(inputStream, path_save, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            throw new StorageException("Failed to store file " + filename, e);
+            e.printStackTrace();
         }
     }
 
@@ -129,9 +103,8 @@ public class FileSystemStorage implements Storage {
     public boolean exists(String filename) {
         checkPath(filename);
         Path file = getPath(filename);
-        Resource resource = null;
         try {
-            resource = new UrlResource(file.toUri());
+            Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return true;
             }
@@ -144,10 +117,10 @@ public class FileSystemStorage implements Storage {
     public void copyAndDelete(String old_file, String new_file, boolean delete) {
         checkPath(old_file, new_file);
 
-        Path src  = getPath(old_file);
-        Path dect = getPath(new_file);
         try {
-            FileSystemUtils.copyRecursively(src.toFile(), dect.toFile());
+            Path src  = getPath(old_file);
+            Path dest = getPath(new_file);
+            FileSystemUtils.copyRecursively(src.toFile(), dest.toFile());
             if (delete){
                 delete(old_file);
             }

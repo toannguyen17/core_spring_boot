@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +22,7 @@ public class AuthInitializer implements Auth, Guard {
 	protected Users user;
 
 	@Autowired
-	protected HttpServletRequest request;
+	protected HttpSession session;
 
 	@Autowired
 	protected UserProvider provider;
@@ -46,13 +48,8 @@ public class AuthInitializer implements Auth, Guard {
 			return user;
 		}
 
-		HttpSession session = request.getSession();
-
 		if(session.getAttribute("login_web") != null){
 			Long id = (Long) session.getAttribute("login_web");
-
-			System.out.println("------------------------------------");
-			System.out.println(id);
 
 			if (id != 0){
 				user = provider.retrieveById(id);
@@ -90,7 +87,7 @@ public class AuthInitializer implements Auth, Guard {
 	@Override
 	public void logout(HttpServletRequest request, HttpServletResponse response) {
 		Cookie[] cookies = request.getCookies();
-		HttpSession session = request.getSession();
+
 		session.removeAttribute("login_web");
 
 		if (cookies != null && response != null){
@@ -108,12 +105,15 @@ public class AuthInitializer implements Auth, Guard {
 			cycleRememberToken(user);
 		}
 		user         = null;
-		this.request = null;
 
 		session.invalidate();
 	}
 
 	protected Recaller recaller() {
+		HttpServletRequest request =
+				((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+						.getRequest();
+
 		if (request == null)
 			return null;
 
@@ -142,7 +142,6 @@ public class AuthInitializer implements Auth, Guard {
 	}
 
 	protected void updateSession(Long id){
-		HttpSession session = request.getSession();
 		session.setAttribute("login_web", id);;
 	}
 
@@ -170,9 +169,5 @@ public class AuthInitializer implements Auth, Guard {
 	@Override
 	public Guard guard() {
 		return this;
-	}
-
-	public void setRequest(HttpServletRequest request) {
-		this.request = request;
 	}
 }
